@@ -1,42 +1,82 @@
-<div class="row">
-    <center>
-        <!-- ready to eat -->
-        <div class="col-md-6">
-            <h3 class="submitFont">Ready to eat!</h4>
-            <div id="ready_to_eat">
+<img src="/assets/img/burger.jpg" class="rounded mx-auto d-block" alt="burger">
+<h1 class="text-center">Eat-Da-Burger!</h1>
 
-                <!-- ready burgers -->    
-                {{#each burgers}}
-                  {{#unless devoured}}
-                  <form action="burger/eat/{{id}}"
-                  method="POST">
-                    <div class="input-group">
-                        <li class="form-control">{{id}}, {{burger_name}}</li>
-                            <span class="input-group-btn">
-                                <button class="btn btn-success devour-button" type="submit">Devour it!</button>
-                            </span>
-                    </div>
-                  </form>
-                  {{/unless}}
-                {{/each}}  
-            </div>
-        </div>
+<br>
+<br>
 
-    <!-- already eaten -->
-    <div class="col-md-6">
-        <h3 class="submitFont">Already eaten:</h3>
-        <div id="already_eaten">
-
-            <!--insert eaten burgers here -->
-            {{#each burgers}}
-            {{#if this.devoured}}
-            <div class="input-group">
-                <li class="form-control">{{this.id}}. {{this.burger_name}}</li>
-            </div>
-            {{/if}}
-            {{/each}}
-        </div>
+<div class="container">
+  <div class="row">
+    <div class="col s6">
+      <h3>Eat it!</h3>
+      {{#each burgers}}
+      {{#unless this.devoured}}
+      <div>
+        <form id="eat">
+        <form action="/burgers/{{this.id}} method=PUT" method="POST">
+          <button type="submit" class='burgerAvailable'> {{this.burger_name}}</button>
+          </form>
+        </form>
+      </div>
+      {{/unless}}
+      {{/each}}
     </div>
 
-    </center>
+    <div class="col s6">
+      <form id="eaten">
+      <h3>You have eaten:</h3>
+      {{#each burgers}}
+      {{#if this.devoured}}
+      <div class='burgerEaten'>
+        <div>
+          {{this.burger_name}}
+        </div>
+      </div>
+      {{/if}}
+      {{/each}}
+      </form>
+    </div>
+  </div>
 </div>
+
+<br>
+<br>
+
+<div class="row text-center">
+  <div class="col s12">
+    <h3 class="text">Add a burger:</h3>
+    <form action="/burgers" method="POST">
+      <input type="text" id="name" name="burger_name" placeholder="type here">
+      <button type="submit" class="addBurgerButton">Submit</button>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(".eat").on("click", function(event) {
+    event.preventDefault();
+
+
+    var eatBurger = $(this).data("eaten");
+
+    $.ajax("/burgers/" + id, {
+      type: "PUT"
+      data: eatBurger
+      }).then(
+        function() {
+          location.reload();
+        }
+      );
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
